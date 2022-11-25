@@ -79,14 +79,14 @@ for i in me:
     print(i)
 
 
-class Array2:
+class ArrayIterable:
     my_list = [1, 2, 3, 4, 5]
 
     def __getitem__(self, item):
         return self.my_list[item]
 
 
-me2 = Array2()
+me2 = ArrayIterable()
 print(isinstance(me2, Iterable))
 # False , 因为 isinstance 这种方法就是检查对象是否有 __iter__ 方法,所以用 isinstance(my_list, Iterable) 去判断是否可迭代是不准确
 for i in me2:
@@ -108,4 +108,40 @@ next(gen)
 '''
 迭代器协议
 对比可迭代对象，迭代器的内部只是多了一个函数而已 – __next__()
+可以用 next 来获取元素
 '''
+
+from collections.abc import Iterator
+
+
+class Array_next:
+    index = 0
+    my_list = [1, 2, 3, 4]
+
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        if self.index <= len(self.my_list) - 1:
+            value = self.my_list[self.index]
+            self.index += 1
+            return value
+        raise StopIteration
+
+
+my_iterator = iter(Array_next())
+print(isinstance(my_iterator, Iterator))
+print(next(my_iterator))  # output: 0
+print(next(my_iterator))  # output: 1
+print(next(my_iterator))  # output: 2
+print(next(my_iterator))  # StopIteration
+
+'''
+生成器
+生成器（英文名 Generator ），是一个可以像迭代器那样使用for循环来获取元素的函数
+'''
+
+gen = (i for i in range(1, 10))
+print(gen)
+
+
